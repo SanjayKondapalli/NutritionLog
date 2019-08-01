@@ -22,9 +22,8 @@ export default class App extends React.Component {
       <Swiper
         loop={false}
         showsPagination={false}
-        index={2}>
+        index={1}>
         <Library /> 
-        <Daily />
         <Home />       
         <Camera />
         
