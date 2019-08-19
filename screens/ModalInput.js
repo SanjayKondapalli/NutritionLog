@@ -44,7 +44,7 @@ export default class NutInput extends Component {
             />
           </View>
           <View>
-            <Text>Protein: </Text>
+            <Text>Protein(g): </Text>
             <TextInput
               style={styles.TextInputStyle}
               keyboardType='numeric'
@@ -53,7 +53,7 @@ export default class NutInput extends Component {
             />
           </View>
           <View>
-            <Text>Fat: </Text>  
+            <Text>Fat(g): </Text>  
             <TextInput
               style={styles.TextInputStyle}
               keyboardType='number-pad'

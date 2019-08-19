@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Alert, Button, Modal, StyleSheet, TextInput, Text, View} from 'react-native';
 import ModalInput from './ModalInput.js'
-
- 
+//import ind from '../node_modules/fs/index.js'
+//import firebase from 'react-native-firebase';
 
 var date = new Date().getDate();
 var month = new Date().getMonth() + 1;
@@ -13,6 +13,7 @@ var tempProt = 0;
 var tempFat = 0;
 var tempCarbs = 0;
 
+//ind.heyo;
 
 class ModalExample extends Component {
   state = {
@@ -21,6 +22,10 @@ class ModalExample extends Component {
 
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
+  }
+
+  updateNutValues(){
+
   }
 
   render() {
@@ -32,15 +37,16 @@ class ModalExample extends Component {
           visible={this.state.modalVisible}
           onRequestClose={() => {
             Alert.alert('Modal has been closed.');
+            this.setModalVisible(!this.state.modalVisible);
           }}>
           <ModalInput />
           <View style={{marginTop: 22}}>
             
-            <View>
-              
+            <View>             
               <Button
                 onPress={() => {
                   this.setModalVisible(!this.state.modalVisible);
+                  this.updateNutValues();
                 }}
                 title="Confirm">
               </Button>
@@ -52,9 +58,11 @@ class ModalExample extends Component {
           <Button
             onPress={() => {
               this.setModalVisible(true);
+              
             }}
-            title="Add Nutrients">
-          </Button>
+            title="Add Nutrients"
+          />
+          
         </View>
       </View>
     );
@@ -72,24 +80,38 @@ class Greeting extends Component {
 }
 
 class Nutrients extends Component {
+  state = {
+    Calories: 0,
+    Protein: 0,
+    Fat: 0,
+    Carbs: 0
+  }
   render(){
     return(
       <View>
         <View style={{backgroundColor: '#F0F3BD'}}>
           <Text style={{textAlign: 'left', color:'#FFFFFF',fontSize:40}}>Calories</Text>
-          <Text style={{textAlign: 'right',color:'#FFFFFF',fontSize:40}}>{tempCal} cal</Text>
+          <Text style={{textAlign: 'right',color:'#FFFFFF',fontSize:40}}>{this.state.Calories} cal</Text>
         </View>
         <View style={{backgroundColor: '#02C39A'}}>
           <Text style={{color:'#FFFFFF',fontSize:40}}>Protein</Text>
-          <Text style={{textAlign: 'right',color:'#FFFFFF',fontSize:40}}>{tempProt} g</Text>
+          <Text style={{textAlign: 'right',color:'#FFFFFF',fontSize:40}}>{this.state.Protein} g</Text>
         </View>
         <View style={{backgroundColor: '#00A896'}}>
           <Text style={{color:'#FFFFFF',fontSize:40}}>Fat</Text>
-          <Text style={{textAlign: 'right',color:'#FFFFFF',fontSize:40}}>{tempFat} g</Text>
+          <Text style={{textAlign: 'right',color:'#FFFFFF',fontSize:40}}>{this.state.Fat} g</Text>
         </View>
         <View style={{backgroundColor: '#028090'}}>
           <Text style={{color:'#FFFFFF',fontSize:40}}>Carbohydrates</Text>
-          <Text style={{textAlign: 'right',color:'#FFFFFF',fontSize:40}}>{tempCarbs} g</Text>
+          <Text style={{textAlign: 'right',color:'#FFFFFF',fontSize:40}}>{this.state.Carbs} g</Text>
+        </View>
+        <View>
+        <ModalExample 
+          Calories={this.state.Calories}
+          Protein={this.state.Protein}
+          Fat={this.state.Fat}
+          Carbs={this.state.Carbs}
+        />
         </View>
         
       </View>
@@ -111,9 +133,7 @@ export default class Home extends Component {
         <View>
           <Nutrients />
         </View>
-        <View>
-          <ModalExample />
-        </View>
+
         
       </View>   
     );
