@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Alert, Button, Modal, StyleSheet, TextInput, Text, View} from 'react-native';
 import ModalInput from './ModalInput.js'
+import AsyncStorage from '@react-native-community/async-storage'
+
 //import ind from '../node_modules/fs/index.js'
 //import firebase from 'react-native-firebase';
 
@@ -8,24 +10,18 @@ var date = new Date().getDate();
 var month = new Date().getMonth() + 1;
 var year = new Date().getFullYear();
 
-var tempCal = 0;
-var tempProt = 0;
-var tempFat = 0;
-var tempCarbs = 0;
-
-//ind.heyo;
 
 class ModalExample extends Component {
-  state = {
-    modalVisible: false,
-  };
+  constructor(){
+    super();
+    this.state = {
+      modalVisible: false
+
+    }
+  }
 
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
-  }
-
-  updateNutValues(){
-
   }
 
   render() {
@@ -39,30 +35,20 @@ class ModalExample extends Component {
             Alert.alert('Modal has been closed.');
             this.setModalVisible(!this.state.modalVisible);
           }}>
-          <ModalInput />
-          <View style={{marginTop: 22}}>
-            
-            <View>             
-              <Button
-                onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
-                  this.updateNutValues();
-                }}
-                title="Confirm">
-              </Button>
-            </View>
-          </View>
+          <ModalInput
+            updateNutValues={this.props.updateNutValues}
+            setModalVisible={this.setModalVisible.bind(this)}
+          />
+          
         </Modal>
         
         <View style={styles.buttonContainer}>
           <Button
             onPress={() => {
               this.setModalVisible(true);
-              
             }}
-            title="Add Nutrients"
-          />
-          
+            title="Add Nutrients">
+          </Button>
         </View>
       </View>
     );
@@ -80,14 +66,106 @@ class Greeting extends Component {
 }
 
 class Nutrients extends Component {
-  state = {
-    Calories: 0,
-    Protein: 0,
-    Fat: 0,
-    Carbs: 0
+  constructor(){
+    super();
+    this.state = {
+      Calories: 0,
+      Protein: 0,
+      Fat: 0,
+      Carbs: 0,
+    }
   }
+
+  componentDidMount(){
+    await AsyncStorage.getItem(
+      'NutritionApp:Calories'
+    ).then(Calories => {
+      this.setState({Calories})
+    })
+
+    await AsyncStorage.getItem(
+      'NutritionApp:Protein'
+    ).then(Protein => {
+      this.setState({Protein})
+    })
+
+    await AsyncStorage.getItem(
+      'NutritionApp:Fat'
+    ).then(Fat => {
+      this.setState({Fat})
+    })
+
+    await AsyncStorage.getItem(
+      'NutritionApp:Carbs'
+    ).then(Carbs => {
+      this.setState({Carbs})
+    })
+
+    this.resetNutValues();
+  }
+
+  updateNutValues(cals, proteins, fats, carbs){
+    if(cals != 0){
+      this.setState({
+        Calories: this.state.Calories + parseInt(cals)
+      })
+    }
+    if(proteins != 0){
+      this.setState({
+        Protein: this.state.Protein + parseInt(proteins),
+      })
+    }
+    if(fats != 0){
+      this.setState({
+        Fat: this.state.Fat + parseInt(fats),
+      })
+    }
+    if(carbs != 0){
+      this.setState({
+        Carbs: this.state.Carbs + parseInt(carbs)
+      })
+    }
+    
+    AsyncStorage.setItem(
+      '@NutritionApp:Calories',
+      JSON.stringify(this.state.Calories)
+    )
+
+    AsyncStorage.setItem(
+      '@NutritionApp:Protein',
+      this.state.Protein
+    )
+
+    AsyncStorage.setItem(
+      '@NutritionApp:Fat',
+      this.state.Fat
+    )
+
+    AsyncStorage.setItem(
+      '@NutritionApp:Carbs',
+      this.state.Carbs
+    )
+
+  }
+
+  resetNutValues(){
+    var day = new Date();
+    var newDay = day.getHours();
+    if(newDay == 0){
+      this.setState({
+        Calories: 0,
+        Protein: 0,
+        Fat: 0,
+        Carbs: 0
+      })
+    }
+  }
+
+
+
   render(){
     return(
+      
       <View>
         <View style={{backgroundColor: '#F0F3BD'}}>
           <Text style={{textAlign: 'left', color:'#FFFFFF',fontSize:40}}>Calories</Text>
@@ -107,10 +185,7 @@ class Nutrients extends Component {
         </View>
         <View>
         <ModalExample 
-          Calories={this.state.Calories}
-          Protein={this.state.Protein}
-          Fat={this.state.Fat}
-          Carbs={this.state.Carbs}
+          updateNutValues={this.updateNutValues.bind(this)}
         />
         </View>
         

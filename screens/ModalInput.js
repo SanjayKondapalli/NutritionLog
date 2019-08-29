@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, TextInput, Text, View} from 'react-native';
+import {Button, StyleSheet, TextInput, Text, View} from 'react-native';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 
 var radio_props = [
@@ -10,7 +10,7 @@ var radio_props = [
 export default class NutInput extends Component {
     constructor(props) {
       super(props);
-      this.state = { text: '', text2: '', text3: '', text4: '' };
+      this.state = { text: '', text2: '', text3: '', text4: '', text5: '' };
     }
   
     onChanged(text){
@@ -61,13 +61,22 @@ export default class NutInput extends Component {
               value={this.state.text3}
             />
           </View>
+          <View>
+            <Text>Carbohydrates(g): </Text>  
+            <TextInput
+              style={styles.TextInputStyle}
+              keyboardType='number-pad'
+              onChangeText={(text4) => this.setState({text4})}
+              value={this.state.text4}
+            />
+          </View>
           <View><Text style={{textDecorationLine: 'underline'}}>Optional</Text></View>
           <View>
             <Text>Dish Name: </Text>
             <TextInput
               style={styles.TextInputStyle}
-              onChangeText={(text4) => this.setState({text4})}
-              value={this.state.text4}
+              onChangeText={(text5) => this.setState({text5})}
+              value={this.state.text5}
             />
           </View>
           <View>
@@ -77,6 +86,17 @@ export default class NutInput extends Component {
               initial={0}
               onPress={(value) => {this.setState({value:value})}}
             />
+          </View>
+          <View style={{marginTop: 22}}>  
+            <View>             
+              <Button
+                onPress={() => {
+                  this.props.setModalVisible(false);
+                  this.props.updateNutValues(this.state.text, this.state.text2, this.state.text3, this.state.text4);
+                }}
+                title="Confirm">
+              </Button>
+            </View>
           </View>
         </View>
       );

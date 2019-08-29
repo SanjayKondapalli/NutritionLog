@@ -14,7 +14,7 @@ import Home from './screens/Home.js'
 import Camera from './screens/Camera.js'
 import Library from './screens/Library.js'
 import Daily from './screens/Daily.js'
-
+import Loading from './screens/Loading.js'
 export default class App extends React.Component {
   render() { 
     //return <AppContainer />;
@@ -22,7 +22,8 @@ export default class App extends React.Component {
       <Swiper
         loop={false}
         showsPagination={false}
-        index={1}>
+        index={2}>
+        <Loading />
         <Library /> 
         <Home />       
         <Camera />
